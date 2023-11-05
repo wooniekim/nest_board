@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -52,6 +53,17 @@ export class PostController {
       title,
       content,
     );
+
+    return res;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('/:id')
+  async deletePost(@Param('id') id, @User() user) {
+    const userId = user.id;
+    const postId = id;
+
+    const res = await this.postService.removePost(userId, postId);
 
     return res;
   }

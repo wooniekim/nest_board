@@ -57,4 +57,13 @@ export class PostService {
 
     return { affected: updateResult?.affected };
   }
+
+  async removePost(userId: string, postId: string) {
+    const deleteResult = await this.postRepository.softDelete({
+      id: postId,
+      userId: userId,
+    });
+
+    return { affected: deleteResult?.affected };
+  }
 }
