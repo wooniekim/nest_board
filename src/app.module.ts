@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import * as path from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-// import { typeORMConfig } from './configs/typeorm.config';
-import * as path from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 console.log(`.env.${process.env.NODE_ENV}`);
@@ -25,7 +24,7 @@ console.log(`.env.${process.env.NODE_ENV}`);
         database: configService.get('DB_NAME'),
         username: configService.get('DB_USER'),
         password: configService.get('DB_PASSWORD'),
-        entities: [path.join(__dirname, 'src/entities/**/*.entity.{js, ts}')],
+        entities: [path.join(__dirname, '/entities/**/*.entity.{js, ts}')],
         synchronize: false,
         logging: true,
         timezone: 'local',
