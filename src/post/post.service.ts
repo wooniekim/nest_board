@@ -19,4 +19,13 @@ export class PostService {
 
     return post;
   }
+  async getPost(postId: string) {
+    const post = await this.postRepository.findOne({
+      where: {
+        id: postId,
+      },
+    });
+
+    return post;
+  }
 }

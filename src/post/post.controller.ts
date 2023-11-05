@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { PostService } from './post.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { User } from 'src/decorators/user.decorator';
@@ -17,5 +17,13 @@ export class PostController {
     const article = await this.postService.createPost(title, content, userId);
 
     return article;
+  }
+  @Get('/:id')
+  async readPost(@Param('id') id) {
+    const postId = id;
+
+    const post = await this.postService.getPost(postId);
+
+    return post;
   }
 }
