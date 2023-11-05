@@ -7,9 +7,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import * as path from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
+console.log(`.env.${process.env.NODE_ENV}`);
+
 @Module({
   imports: [
     ConfigModule.forRoot({
+      envFilePath: `.env.${process.env.NODE_ENV}`,
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
