@@ -18,4 +18,10 @@ export class UserController {
   async getUserInfo() {
     return 'user-info Page';
   }
+
+  //   @UseGuards(LoggedInGuard)
+  //   @Get()
+  //   async getUserInfo(@User() user) {
+  //     return user;
+  //   }
 }
