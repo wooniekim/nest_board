@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { PostModule } from './post/post.module';
+import { CommentModule } from './comment/comment.module';
 
 console.log(`.env.${process.env.NODE_ENV}`);
 
@@ -35,6 +36,7 @@ console.log(`.env.${process.env.NODE_ENV}`);
     UserModule,
     AuthModule,
     PostModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
