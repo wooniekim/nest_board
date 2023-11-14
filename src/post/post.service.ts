@@ -10,18 +10,24 @@ export class PostService {
     private readonly postRepository: Repository<PostEntity>,
   ) {}
 
-  async createPost(title: string, content: string, userId: string) {
+  async createPost(
+    title: string,
+    content: string,
+    userId: string,
+    userNickname: string,
+  ) {
     const post = await this.postRepository.save({
       title: title,
       content: content,
       userId: userId,
+      userNickname: userNickname,
     });
 
     return post;
   }
 
   async getPost(postId: string) {
-    const article = await this.postRepository.findOne({
+    const post = await this.postRepository.findOne({
       where: {
         id: postId,
       },
@@ -30,7 +36,7 @@ export class PostService {
       },
     });
 
-    return article;
+    return post;
   }
 
   async modifyPost(

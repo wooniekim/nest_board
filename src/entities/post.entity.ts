@@ -7,6 +7,7 @@ import { IsString } from 'class-validator';
 
 @Entity('Post')
 export class PostEntity extends CommonBigPKEntity {
+  // 게시글 제목
   @ApiProperty({
     example: '게시글 제목입니다.',
     description: '게시글 제목',
@@ -15,7 +16,7 @@ export class PostEntity extends CommonBigPKEntity {
   @IsString()
   @Column('varchar', { unique: false, nullable: false })
   title: string;
-
+  // 게시글 내용
   @ApiProperty({
     example: '게시글 내용입니다.',
     description: '게시글 내용',
@@ -25,11 +26,16 @@ export class PostEntity extends CommonBigPKEntity {
   @Column('text', { unique: false, nullable: false })
   content: string;
 
+  // 글쓴이 아이디
   @Column('bigint', { unique: false, nullable: false })
   userId: string;
 
+  // 글쓴이 닉네임
+  @Column('varchar', { unique: false, nullable: false })
+  nickname: string;
+
   @ManyToOne(() => UserEntity, (user) => user.posts)
-  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'nickname', referencedColumnName: 'nickname' })
   user: UserEntity;
 
   @OneToMany(() => CommentEntity, (comment) => comment.post)

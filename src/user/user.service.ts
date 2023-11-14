@@ -11,7 +11,12 @@ export class UserService {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async register(email: string, password: string) {
+  async register(
+    email: string,
+    password: string,
+    nickname: string,
+    tel: number,
+  ) {
     const existedUser = await this.userRepository.findOne({
       where: {
         email: email,
@@ -27,6 +32,8 @@ export class UserService {
     const user = await this.userRepository.save({
       email: email,
       password: hashedPassword,
+      nickname: nickname,
+      tel: tel,
     });
 
     return user;

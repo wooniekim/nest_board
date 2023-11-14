@@ -34,13 +34,19 @@ export class PostController {
   @Post()
   async createPost(@Body() body: CreatePostDto, @User() user) {
     const userId = user.id;
+    const userNickname = user.nickname;
 
     const title = body.title;
     const content = body.content;
 
-    const article = await this.postService.createPost(title, content, userId);
+    const post = await this.postService.createPost(
+      title,
+      content,
+      userId,
+      userNickname,
+    );
 
-    return article;
+    return post;
   }
 
   @Get('/:id')
