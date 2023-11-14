@@ -11,6 +11,7 @@ import {
 import { PostService } from './post.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { User } from 'src/decorators/user.decorator';
+import { CreatePostDto } from 'src/dtos/post/create-post.dto';
 
 @Controller('post')
 export class PostController {
@@ -18,7 +19,7 @@ export class PostController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  async createPost(@Body() body, @User() user) {
+  async createPost(@Body() body: CreatePostDto, @User() user) {
     const userId = user.id;
 
     const title = body.title;
