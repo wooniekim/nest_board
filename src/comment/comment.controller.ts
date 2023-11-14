@@ -1,4 +1,12 @@
-import { Body, Controller, Param, Post, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { User } from 'src/decorators/user.decorator';
@@ -37,6 +45,16 @@ export class CommentController {
       userId,
       content,
     );
+
+    return res;
+  }
+  @UseGuards(JwtAuthGuard)
+  @Delete('/:id')
+  async deleteComment(@Param('id') id, @User() user) {
+    const commentId = id;
+    const userId = user.id;
+
+    const res = await this.commentService.removeComment(commentId, userId);
 
     return res;
   }
