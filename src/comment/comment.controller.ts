@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   UseGuards,
@@ -47,7 +48,11 @@ export class CommentController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Put('/:id')
-  async updateComment(@Body() body, @User() user, @Param('id') id) {
+  async updateComment(
+    @Body() body,
+    @User() user,
+    @Param('id', ParseIntPipe) id,
+  ) {
     const content = body.content;
     const userId = user.id;
     const commentId = id;
@@ -63,7 +68,7 @@ export class CommentController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Delete('/:id')
-  async deleteComment(@Param('id') id, @User() user) {
+  async deleteComment(@Param('id', ParseIntPipe) id, @User() user) {
     const commentId = id;
     const userId = user.id;
 

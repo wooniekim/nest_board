@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   UseGuards,
@@ -43,7 +44,7 @@ export class PostController {
   }
 
   @Get('/:id')
-  async readPost(@Param('id') id) {
+  async readPost(@Param('id', ParseIntPipe) id) {
     const postId = id;
 
     const post = await this.postService.getPost(postId);
@@ -54,7 +55,7 @@ export class PostController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Put('/:id')
-  async updatePost(@Param('id') id, @User() user, @Body() body) {
+  async updatePost(@Param('id', ParseIntPipe) id, @User() user, @Body() body) {
     const userId = user.id;
     const postId = id;
 
@@ -74,7 +75,7 @@ export class PostController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Delete('/:id')
-  async deletePost(@Param('id') id, @User() user) {
+  async deletePost(@Param('id', ParseIntPipe) id, @User() user) {
     const userId = user.id;
     const postId = id;
 
