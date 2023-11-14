@@ -7,12 +7,14 @@ import {
   Post,
   Put,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { User } from 'src/decorators/user.decorator';
 import { CreatePostDto } from 'src/dtos/post/create-post.dto';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { undefinedToNullInterceptor } from 'src/interceptors/undefinedToNull.interceptor';
 
 @ApiTags('게시글 API')
 @Controller('post')
