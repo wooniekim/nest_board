@@ -10,7 +10,7 @@ import {
 import { CommentService } from './comment.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { User } from 'src/decorators/user.decorator';
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateCommentDto } from 'src/dtos/comment/create-comment.dto';
 
 @ApiTags('댓글 API')
@@ -25,6 +25,7 @@ export class CommentController {
   @ApiBody({
     type: CreateCommentDto,
   })
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post()
   async createComment(@Body() body, @User() user) {
@@ -43,6 +44,7 @@ export class CommentController {
     return comment;
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Put('/:id')
   async updateComment(@Body() body, @User() user, @Param('id') id) {
@@ -58,6 +60,7 @@ export class CommentController {
 
     return res;
   }
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Delete('/:id')
   async deleteComment(@Param('id') id, @User() user) {

@@ -49,6 +49,7 @@ export class PostController {
     return post;
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Put('/:id')
   async updatePost(@Param('id') id, @User() user, @Body() body) {
@@ -68,6 +69,7 @@ export class PostController {
     return res;
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Delete('/:id')
   async deletePost(@Param('id') id, @User() user) {
