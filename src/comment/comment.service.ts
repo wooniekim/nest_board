@@ -13,13 +13,13 @@ export class CommentService {
     content: string,
     parentId: string,
     userId: string,
-    articleId: string,
+    postId: string,
   ) {
     const comment = await this.commentRepository.save({
       content: content,
       userId: userId,
       parentId: parentId,
-      articleId: articleId,
+      postId: postId,
     });
 
     return comment;
