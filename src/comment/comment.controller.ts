@@ -10,11 +10,21 @@ import {
 import { CommentService } from './comment.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { User } from 'src/decorators/user.decorator';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { CreateCommentDto } from 'src/dtos/comment/create-comment.dto';
 
+@ApiTags('댓글 API')
 @Controller('comment')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
+  @ApiOperation({
+    summary: '댓글 작성 API',
+    description: '유저가 댓글을 작성한다.',
+  })
+  @ApiBody({
+    type: CreateCommentDto,
+  })
   @UseGuards(JwtAuthGuard)
   @Post()
   async createComment(@Body() body, @User() user) {

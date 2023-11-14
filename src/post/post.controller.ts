@@ -12,11 +12,21 @@ import { PostService } from './post.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { User } from 'src/decorators/user.decorator';
 import { CreatePostDto } from 'src/dtos/post/create-post.dto';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('게시글 API')
 @Controller('post')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
+  @ApiOperation({
+    summary: '게시글 작성 API',
+    description: '유저가 게시글을 작성한다.',
+  })
+  @ApiBody({
+    type: CreatePostDto,
+  })
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post()
   async createPost(@Body() body: CreatePostDto, @User() user) {
