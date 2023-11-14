@@ -21,13 +21,16 @@ export class PostService {
   }
 
   async getPost(postId: string) {
-    const post = await this.postRepository.findOne({
+    const article = await this.postRepository.findOne({
       where: {
         id: postId,
       },
+      relations: {
+        comments: true,
+      },
     });
 
-    return post;
+    return article;
   }
 
   async modifyPost(
