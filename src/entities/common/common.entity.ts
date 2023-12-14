@@ -7,7 +7,7 @@ import {
 
 export class CommonBigPKEntity {
   @PrimaryGeneratedColumn({ type: 'bigint' })
-  id: string;
+  id: number;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

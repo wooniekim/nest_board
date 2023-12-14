@@ -1,5 +1,15 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { exceptionErr } from 'src/common/error';
+import {
+  CreatePostDbDto,
+  CreatePostWithFileDto,
+  UpdatePostWithFileDto,
+} from '../dtos/post/create-post.dto';
 import { PostEntity } from 'src/entities/post.entity';
 import { Repository } from 'typeorm';
 
@@ -10,23 +20,42 @@ export class PostService {
     private readonly postRepository: Repository<PostEntity>,
   ) {}
 
-  async createPost(
-    title: string,
-    content: string,
-    userId: string,
-    userNickname: string,
-  ) {
-    const post = await this.postRepository.save({
-      title: title,
-      content: content,
-      userId: userId,
-      userNickname: userNickname,
-    });
+  async createPost(createPostDbDto: CreatePostDbDto): Promise<PostEntity> {
+    try {
+      const post = await this.postRepository.save(createPostDbDto);
+      return post;
+    } catch (error) {
+      console.error('게시물 생성 중 오류 발생:', error);
+      throw new InternalServerErrorException('게시물 생성 중 오류 발생');
+    }
+  }
 
+  async createPostWithFile(
+    createPostWithFileDto: CreatePostWithFileDto,
+  ): Promise<PostEntity> {
+    const post = await this.postRepository.save(createPostWithFileDto);
     return post;
   }
 
-  async getPost(postId: string) {
+  async getAllPost(): Promise<PostEntity[]> {
+    try {
+      const post = await this.postRepository.find({
+        select: [
+          'title',
+          'nickname',
+          'createdAt',
+          'recommand',
+          'unrecommand',
+          'id',
+        ],
+      });
+      return post;
+    } catch (error) {
+      exceptionErr(error);
+    }
+  }
+
+  async getPost(postId: number): Promise<PostEntity> {
     const post = await this.postRepository.findOne({
       where: {
         id: postId,
@@ -39,9 +68,23 @@ export class PostService {
     return post;
   }
 
+  async modifyPostWithFile(updatePostWithFileDto: UpdatePostWithFileDto) {
+    const post = await this.postRepository.update(
+      {
+        id: updatePostWithFileDto.id,
+      },
+      {
+        title: updatePostWithFileDto.title,
+        content: updatePostWithFileDto.content,
+        url: updatePostWithFileDto.url,
+      },
+    );
+    return post;
+  }
+
   async modifyPost(
-    userId: string,
-    postId: string,
+    userId: number,
+    postId: number,
     title: string,
     content: string,
   ) {
@@ -61,18 +104,30 @@ export class PostService {
       {
         title: title,
         content: content,
+        url: null,
       },
     );
 
     return { affected: updateResult?.affected };
   }
 
-  async removePost(userId: string, postId: string) {
-    const deleteResult = await this.postRepository.softDelete({
-      id: postId,
-      userId: userId,
-    });
+  async removePost(userId: number, postId: number) {
+    try {
+      const deleteResult = await this.postRepository.softDelete({
+        id: postId,
+        userId: userId,
+      });
+      return { affected: deleteResult?.affected };
+    } catch (error) {
+      return error.message;
+    }
+  }
 
-    return { affected: deleteResult?.affected };
+  async isUserPostOwner(postId: number, userId: number): Promise<boolean> {
+    const post = await this.postRepository.findOne({ where: { id: postId } });
+    if (!post) {
+      throw new Error('게시물을 찾을 수 없습니다');
+    }
+    return post.userId === userId;
   }
 }

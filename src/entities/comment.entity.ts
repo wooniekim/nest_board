@@ -15,24 +15,16 @@ export class CommentEntity extends CommonBigPKEntity {
   content: string;
 
   @Column('bigint', { unique: false, nullable: true })
-  parentId: string | null;
+  parentId: number;
 
   @Column('bigint', { unique: false, nullable: false })
-  userId: string;
-
-  @ApiProperty({
-    example: '1',
-    description: '댓글을 달 post의 ID입니다.',
-    required: true,
-  })
-  @Column('bigint', { unique: false, nullable: false })
-  postId: string;
+  userId: number;
 
   @ManyToOne(() => UserEntity, (user) => user.comments)
   @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
   user: UserEntity;
 
   @ManyToOne(() => PostEntity, (post) => post.comments)
-  @JoinColumn({ name: 'postId', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'parentId', referencedColumnName: 'id' })
   post: PostEntity;
 }
