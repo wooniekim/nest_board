@@ -28,6 +28,7 @@ import {
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UpdatePostDto } from 'src/dtos/post/update-post.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { RecommandDto } from 'src/dtos/post/recommand-post.dto';
 // import { undefinedToNullInterceptor } from 'src/interceptors/undefinedToNull.interceptor';
 
 @ApiTags('게시글 API')
@@ -74,6 +75,17 @@ export class PostController {
       nickname: user.nickname,
     });
     return post;
+  }
+
+  @Post('/:id/recommand')
+  @HttpCode(HttpStatus.ACCEPTED)
+  @UseGuards(JwtAuthGuard)
+  async recommand(
+    @Param('id', ParseIntPipe) postId,
+    @Body() recommand: RecommandDto,
+  ) {
+    const recomand = this.postService.recommand(postId, recommand.type);
+    return recomand;
   }
 
   @Get()

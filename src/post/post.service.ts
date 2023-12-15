@@ -123,6 +123,36 @@ export class PostService {
     }
   }
 
+  async recommand(postId: number, recommand: boolean) {
+    try {
+      if (recommand) {
+        await this.postRepository
+          .createQueryBuilder()
+          .update()
+          .set({ recommand: () => 'recommand + 1' })
+          .where('id = :id', { id: postId })
+          .execute();
+        return {
+          type: true,
+          message: 'Recommand count updated successfully',
+        };
+      } else {
+        await this.postRepository
+          .createQueryBuilder()
+          .update()
+          .set({ unrecommand: () => 'unrecommand + 1' })
+          .where('id = :id', { id: postId })
+          .execute();
+        return {
+          type: true,
+          message: 'unRecommand count updated successfully',
+        };
+      }
+    } catch (error) {
+      return error.message;
+    }
+  }
+
   async isUserPostOwner(postId: number, userId: number): Promise<boolean> {
     const post = await this.postRepository.findOne({ where: { id: postId } });
     if (!post) {
